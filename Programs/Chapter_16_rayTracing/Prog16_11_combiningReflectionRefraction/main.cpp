@@ -49,7 +49,7 @@ void init(GLFWwindow* window) {
 	glBindTexture(GL_TEXTURE_2D, screenTextureID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, RAYTRACE_RENDER_WIDTH, RAYTRACE_RENDER_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (const void *)screenTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, RAYTRACE_RENDER_WIDTH, RAYTRACE_RENDER_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, (const void *)screenTexture);
 
 	// Creating Fullscreen Quad Vertices and texture coordinates
 	const float windowQuadVerts[] =
@@ -116,6 +116,7 @@ void setWindowSizeCallback(GLFWwindow *win, int newWidth, int newHeight) {
 }
 
 int main(void) {
+	glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);

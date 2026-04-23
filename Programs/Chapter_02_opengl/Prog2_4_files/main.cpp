@@ -28,8 +28,8 @@ GLuint createShaderProgram() {
 	GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);
 	GLuint vfprogram = glCreateProgram();
 
-	string vertShaderStr = readFile("vertShader.glsl");
-	string fragShaderStr = readFile("fragShader.glsl");
+	string vertShaderStr = readFile("/home/zn/code/computer_graphic_in_opengl/CompanionDiskFilesC++2E/Programs/Chapter_02_opengl/Prog2_4_files/fragShader.glsl");
+	string fragShaderStr = readFile("/home/zn/code/computer_graphic_in_opengl/CompanionDiskFilesC++2E/Programs/Chapter_02_opengl/Prog2_4_files/fragShader.glsl");
 	const char *vertShaderSrc = vertShaderStr.c_str();
 	const char *fragShaderSrc = fragShaderStr.c_str();
 
@@ -58,6 +58,7 @@ void display(GLFWwindow* window, double currentTime) {
 }
 
 int main(void) {
+	glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
 	if (!glfwInit()) { exit(EXIT_FAILURE); }
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
