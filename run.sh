@@ -32,9 +32,14 @@ if [ "$arg" = "--list" ]; then
   exit 0
 fi
 
+# Read the whole target list first: piping xmake straight into `grep -q` lets
+# grep close the pipe early, and `set -o pipefail` then turns the SIGPIPE into a
+# failed pipeline (silently losing every match).
+targets="$(xmake_run show -l targets | tr -s ' \t' '\n\n' || true)"
+
 # Accept either the xmake target name or just the program directory name.
 target="$arg"
-if ! xmake_run show -l targets | tr -s ' \t' '\n\n' | grep -qx "$target"; then
+if ! printf '%s\n' "$targets" | grep -qx "$target"; then
   target="$(find Programs -mindepth 2 -maxdepth 2 -type d -name "$arg" -print -quit \
             | awk -F/ '{print $(NF-1)"_"$NF}')"
   [ -n "$target" ] || { echo "no such sample: $arg (try ./run.sh --list)" >&2; exit 1; }
