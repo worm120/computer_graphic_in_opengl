@@ -4,7 +4,13 @@
 -- To add a new program, just create a directory with main.cpp inside Programs/;
 -- no modifications to this file are required.
 
-add_requires("glew", "glfw", "glm")
+-- On NixOS there is no /usr/lib: use the libs provided by nixpkgs instead of
+-- letting xmake download and build them from source. Enter the toolchain shell
+-- first, then build/run:
+--   nix-shell -p glew glfw glm pkg-config libx11 --run 'xmake f -y --cxx=g++'
+--   nix-shell -p glew glfw glm pkg-config libx11 --run 'xmake run Chapter_02_opengl_Prog2_5_triangle'
+-- or simply: ./run.sh Prog2_5_triangle
+add_requires("glew", "glfw", "glm", {system = true})
 
 local soil2_src = path.join(os.scriptdir(), "SOIL2-master/src")
 
@@ -14,6 +20,9 @@ target("soil2")
     set_languages("c11")
     add_files(soil2_src .. "/SOIL2/*.c")
     add_includedirs(soil2_src, {public = true})
+    -- SOIL2 talks to GLX directly; with a static lib the symbols must be linked
+    -- by every consumer, so expose them as public links.
+    add_links("GL", "GLX", {public = true})
 target_end()
 
 local root = path.join(os.scriptdir(), "Programs")
